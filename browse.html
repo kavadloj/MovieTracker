@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>My Movie Tracker</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <script type="text/javascript" src="scripts/jquery-3.3.1.min.js"></script>
+    <script type="text/javascript" src="scripts/mustache.js"></script>
+    <script type="text/javascript" src="scripts/moviedata.js"></script>
+
+    <link rel="stylesheet" href="css/bootstrap.css">
+    <link rel="stylesheet" href="css/style.css">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/less.js/3.9.0/less.min.js" ></script>
+    <link rel="stylesheet/less" type="text/css" href="css/styles.less"/>
+    
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+
+    <script>
+        function search() {
+            var input, filter, ul, li, a, i, txtValue;
+            input = document.getElementById("moviesearch");
+            filter = input.value.toUpperCase();
+            ul = document.getElementById("movielist");
+            li = ul.getElementsByTagName("li");
+            for (i = 0; i < li.length; i++) {
+                a = li[i].getElementsByTagName("a")[0];
+                txtValue = a.textContent || a.innerText;
+                if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                    li[i].style.display = "";
+                } 
+                else {
+                    li[i].style.display = "none";
+                }
+            }
+        }
+    </script>
+</head>
+<body>
+    
+<div class="pagewrapper">
+    <nav class="navbar navbar-inverse">
+        <div class="container-fluid">
+            <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>                        
+            </button>
+            <a class="navbar-brand" href="home.html"><img src="images/logo.png" alt="MovieTracker" aria-label="MovieTracker logo of red film reel and brand name" width="175" height="48"></a>
+            </div>
+            <div class="collapse navbar-collapse" id="myNavbar">
+            <ul class="nav navbar-nav">
+                <li><a href="home.html">Home</a></li>
+                <li class="active"><a href="#">Browse</a></li>
+                <li><a href="mylist.html">My List</a></li>
+                <li><a href="news.html">News</a></li>
+            </ul>
+            </div>
+        </div>
+        </nav>
+
+        <div class="jumbotron">
+        <div class="container text-center">
+            <h1>Browse Movies & Shows</h1>      
+        </div>
+        </div>
+
+        <script id="template" type="x-tmpl-mustache">
+                <ul id="movielist">
+                    {{#movies}}
+                    <li class="movie">
+                        <a class="moviepanel" data-toggle="collapse" data-parent="#accordion" href="#{{ref}}" onclick="rotate('{{ref}}1')">
+                            {{title}}
+                            <i class="down" id="{{ref}}1"></i>
+                            <div data-toggle="tooltip" title="Add movie to list" class="addbutton" onclick="getMovieID('{{storeID}}')"><p id="plus">&nbsp;</p></div>
+                        </a>
+                    <div id="{{ref}}" class="panel-collapse collapse">
+                        <div class="panel-body">
+                            <img src="{{poster}}" class="poster" alt="Poster" width="91" height="134">
+                            <br>
+                            {{summary}}
+                        </div>
+                    </div>
+                    </li>
+                    {{/movies}}
+                </ul>
+        </script>
+
+        <div class="container-fluid bg-3 text-center">    
+            <div class="row">
+                <input type="text" id="moviesearch" onkeyup="search()" placeholder="Search..." title="Enter movie name">
+                <div id="target"></div> 
+            </div>
+        </div>
+        <br><br><br><br>
+</div>
+
+<footer class="container-fluid text-center">
+    <p>Made by Jonah Kavadlo</p>
+</footer>
+
+</body>
+</html>
+
+<script>
+   function getMovieID(clickedID) {
+        console.log(clickedID);
+        localStorage.setItem('currentMovie', clickedID);
+        window.location="form.html";
+        return false;
+    }
+    $(document).ready(function(){
+        $('[data-toggle="tooltip"]').tooltip();   
+    });
+
+    function rotate(classname){
+        $("#"+classname).toggleClass("rotated");
+    };
+</script>

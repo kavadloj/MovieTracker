@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>My Movie Tracker</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <script type="text/javascript" src="scripts/jquery-3.3.1.min.js"></script>
+    <script type="text/javascript" src="scripts/mustache.js"></script>
+    <script type="text/javascript" src="scripts/newsdata.js"></script>
+
+    <link rel="stylesheet" href="css/bootstrap.css">
+    <link rel="stylesheet" href="css/style.css">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/less.js/3.9.0/less.min.js" ></script>
+    <link rel="stylesheet/less" type="text/css" href="css/styles.less"/>
+    
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+
+</head>
+<body>
+    
+<div class="pagewrapper">
+    <nav class="navbar navbar-inverse">
+        <div class="container-fluid">
+            <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>                        
+            </button>
+            <a class="navbar-brand" href="home.html"><img src="images/logo.png" alt="MovieTracker" aria-label="MovieTracker logo of red film reel and brand name" width="175" height="48"></a>
+            </div>
+            <div class="collapse navbar-collapse" id="myNavbar">
+            <ul class="nav navbar-nav">
+                <li><a href="home.html">Home</a></li>
+                <li><a href="browse.html">Browse</a></li>
+                <li><a href="mylist.html">My List</a></li>
+                <li class="active"><a href="#">News</a></li>
+            </ul>
+            </div>
+        </div>
+        </nav>
+
+        <div class="jumbotron">
+        <div class="container text-center">
+            <h1>News</h1>     
+            <h4>All your movie news in one place.</h4> 
+        </div>
+        </div>
+
+        <script id="template" type="x-tmpl-mustache">
+                <ul id="newslist">
+                    {{#news}}
+                    <li class="news">
+                        <a target="_blank" href="{{url}}">
+                            <div class="row">
+                                <div class="col-sm-10">
+                                    <div>{{source}}</div>
+                                    <h4>{{title}}</h4>
+                                    <h5>{{preview}}</h5>
+                                    <div>{{date}}</div>
+                                </div>
+                                <img class="col-sm-2" id="icon" src="{{icon}}" alt="Article Icon">
+                            </div>
+                        </a>
+                    </li>
+                    <br>
+                    {{/news}}
+                </ul>
+        </script>
+
+        <div class="container-fluid bg-3 text-center">    
+            <div class="row">
+                <div id="target"></div> 
+            </div>
+        </div>
+        <br><br><br><br>
+</div>
+
+<footer class="container-fluid text-center">
+    <p>Made by Jonah Kavadlo</p>
+</footer>
+
+</body>
+</html>

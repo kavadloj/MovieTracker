@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>My Movie Tracker</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <script type="text/javascript" src="scripts/jquery-3.3.1.min.js"></script>
+    <script type="text/javascript" src="scripts/mustache.js"></script>
+    <script type="text/javascript" src="scripts/moviedata.js"></script>
+
+    <link rel="stylesheet" href="css/bootstrap.css">
+    <link rel="stylesheet" href="css/style.css">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/less.js/3.9.0/less.min.js" ></script>
+    <link rel="stylesheet/less" type="text/css" href="css/styles.less"/>
+    
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+</head>
+<body>
+    
+<div class="pagewrapper">
+    <nav class="navbar navbar-inverse">
+        <div class="container-fluid">
+            <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>                        
+            </button>
+            <a class="navbar-brand" href="#"><img src="images/logo.png" alt="MovieTracker" aria-label="MovieTracker logo of red film reel and brand name" width="175" height="48"></a>
+            </div>
+            <div class="collapse navbar-collapse" id="myNavbar">
+            <ul class="nav navbar-nav">
+                <li><a href="home.html">Home</a></li>
+                <li><a href="browse.html">Browse</a></li>
+                <li><a href="mylist.html">My List</a></li>
+                <li><a href="news.html">News</a></li>
+            </ul>
+            </div>
+        </div>
+        </nav>
+
+        <div class="jumbotron">
+        <div class="container text-center">
+            <h1>Add Movie To List</h1>      
+        </div>
+        </div>
+
+        <div class="container-fluid bg-3 text-center">    
+            <form name="addform" class="form-horizontal">
+                <legend class="col-sm-offset-1" id="movietitle"></legend>
+                <br>
+                <div class="form-group">
+                    <label class="control-label col-sm-2" for="status">Status:</label>
+                    <div class="col-sm-10">
+                    <select class="form-control" id="status">
+                        <option>Watched</option>
+                        <option>Want to see</option>
+                    </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label col-sm-2" for="score">Score:</label>
+                    <div class="col-sm-10">
+                    <input type="number" class="form-control" id="score" placeholder="Select Score" min="1" max="10">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label col-sm-2" for="date">Date watched:</label>
+                    <div class="col-sm-10">
+                    <input type="date" class="form-control" id="date">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label col-sm-2" for="rewatches">Rewatches:</label>
+                    <div class="col-sm-10">
+                    <input type="number" class="form-control" id="rewatches" placeholder="Select number" min="0" max="99">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label col-sm-2" for="review">Review:</label>
+                    <div class="col-sm-10">
+                    <textarea class="form-control" rows="5" id="review"></textarea>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-offset-2 col-sm-10">
+                    <button id="submit" type="submit" class="btn btn-default">Submit</button>
+                    </div>
+                </div>
+                </form>
+            </div>
+        </div>
+        <br><br><br><br>
+</div>
+
+<footer class="container-fluid text-center">
+    <p>Made by Jonah Kavadlo</p>
+</footer>
+
+</body>
+</html>
+
+<script>
+    var submit = document.getElementById("submit");
+
+    submit.onclick = function() {
+        var moviedata = localStorage.getItem("currentMovie");
+
+        var status = document.getElementById("status").value;
+        var score = document.getElementById("score").value;
+        var date = document.getElementById("date").value;
+        var rewatches = document.getElementById("rewatches").value;
+        var review = document.getElementById("review").value;
+
+        if(score.length == 0) {
+            score = "N/A";
+        }
+        if(date.length == 0) {
+            date = "N/A";
+        }
+        if(rewatches.length == 0) {
+            rewatches = "N/A";
+        }
+        if(review.length == 0) {
+            review = "N/A";
+        }
+
+        localStorage.setItem(moviedata + "_status", status);
+        localStorage.setItem(moviedata + "_score", score);
+        localStorage.setItem(moviedata + "_date", date);
+        localStorage.setItem(moviedata + "_rewatches", rewatches);
+        localStorage.setItem(moviedata + "_review", review);
+
+        window.location="mylist.html";
+        return false;
+        
+    }
+    
+</script>
+<script>
+window.onload = function insertMovieID()
+{
+    var movie = localStorage.getItem("currentMovie").split('_').join(" ");
+    document.getElementById("movietitle").innerHTML = movie;
+}
+
+document.getElementById("status").onchange = function() {
+    document.getElementById("score").disabled = (this.value == "Want to see");
+    document.getElementById("date").disabled = (this.value == "Want to see");
+    document.getElementById("rewatches").disabled = (this.value == "Want to see");
+    document.getElementById("review").disabled = (this.value == "Want to see");
+}
+document.getElementById("status").change(); //to trigger on load
+</script>

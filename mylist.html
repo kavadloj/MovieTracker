@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>My Movie Tracker</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <script type="text/javascript" src="scripts/jquery-3.3.1.min.js"></script>
+    <script type="text/javascript" src="scripts/mustache.js"></script>
+    <script type="text/javascript" src="scripts/userdata.js"></script>
+
+    <link rel="stylesheet" href="css/bootstrap.css">
+    <link rel="stylesheet" href="css/style.css">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/less.js/3.9.0/less.min.js" ></script>
+    <link rel="stylesheet/less" type="text/css" href="css/styles.less"/>
+    
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+
+    <script>
+        function search() {
+            var input, filter, ul, li, a, i, txtValue;
+            input = document.getElementById("moviesearch");
+            filter = input.value.toUpperCase();
+            ul = document.getElementById("movielist");
+            li = ul.getElementsByTagName("li");
+            for (i = 0; i < li.length; i++) {
+                a = li[i].getElementsByTagName("a")[0];
+                txtValue = a.textContent || a.innerText;
+                if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                    li[i].style.display = "";
+                } 
+                else {
+                    li[i].style.display = "none";
+                }
+            }
+        }
+    </script>
+</head>
+<body>
+    
+<div class="pagewrapper">
+    <nav class="navbar navbar-inverse">
+        <div class="container-fluid">
+            <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>                        
+            </button>
+            <a class="navbar-brand" href="home.html"><img src="images/logo.png" alt="MovieTracker" aria-label="MovieTracker logo of red film reel and brand name" width="175" height="48"></a>
+            </div>
+            <div class="collapse navbar-collapse" id="myNavbar">
+            <ul class="nav navbar-nav">
+                <li><a href="home.html">Home</a></li>
+                <li><a href="browse.html">Browse</a></li>
+                <li class="active"><a href="#">My List</a></li>
+                <li><a href="news.html">News</a></li>
+            </ul>
+            </div>
+        </div>
+        </nav>
+
+        <div class="jumbotron">
+        <div class="container text-center">
+            <h1>My Movie List</h1>      
+        </div>
+        </div>
+
+        <script id="template" type="x-tmpl-mustache">
+                <ul id="movielist">
+                    {{#movies}}
+                    <li class="movie {{ref}}">
+                        <a class="moviepanel" data-toggle="collapse" data-parent="#accordion" href="#{{ref}}-collapse" onclick="rotate('{{ref}}1')">
+                            <span class="movietitle">{{title}}</span>
+                            <i class="down" id="{{ref}}1"></i>
+                            <div data-toggle="tooltip" title="Remove from list" class="removebutton" onclick="removeEntry('{{storeID}}')"><p id="remove">&nbsp;</p></div>
+                            <div data-toggle="tooltip" title="Edit" class="editbutton" onclick="getMovieData('{{storeID}}', '{{status}}', '{{score}}', '{{date}}', '{{rewatches}}', '{{review}}')"><p id="edit">&nbsp;</p></div>
+                        </a>
+                        <div id="{{ref}}-collapse" class="panel-collapse collapse in review-panel">
+                            <div class="panel-body review-internal">
+                                <img src="{{poster}}" class="poster" alt="Poster" width="91" height="134"> <br>
+                                <label class="review-label">Status:</label> {{status}} <br>
+                                <label class="review-label">Score:</label>  {{score}} <br>
+                                <label class="review-label">Date watched:</label>  {{date}} <br>
+                                <label class="review-label">Times rewatched:</label>  {{rewatches}} <br>
+                                <label class="review-label">Review:</label>  {{review}}
+                            </div>
+                        </div>
+                    </li>
+                    {{/movies}}
+                </ul>
+        </script>
+
+        <div class="container-fluid bg-3 text-center">    
+            <div class="row">
+                <div class="browsebutton" onclick="location.href = 'browse.html'">Browse Movies</div>
+                <br><br><br><br>
+                <div id="target"></div> 
+                <div id="nomoviesmessage"></div>
+            </div>
+        </div>
+        <br><br><br><br>
+</div>
+
+<footer id="testing" class="container-fluid text-center">
+    <p>Made by Jonah Kavadlo</p>
+</footer>
+
+</body>
+</html>
+
+<script>
+    $(document).ready(function() {
+        var statuses = ["alien_status", "avengers_status", "fight_club_status", "forrest_gump_status", "inception_status", "joker_status", "pulp_fiction_status", "the_matrix_status"];
+        var references = ["alien", "avengers", "fightclub", "forrestgump", "inception", "joker", "pulpfiction", "thematrix"];
+
+        itemsOnPage = 0;
+        for(i = 0; i < references.length; i++) {
+            if(localStorage.getItem(statuses[i])==null) {
+                $('.' + references[i]).addClass('hidden');
+            }
+            else {
+                itemsOnPage++;
+            }
+        }
+        if(itemsOnPage == 0) {
+            document.getElementById("nomoviesmessage").innerHTML = "You haven't added any movies. Check out the browse page to add some!";
+        }   
+    });
+
+    function getMovieData(clickedID, status, score, date, rewatches, review) {
+        console.log(clickedID);
+        localStorage.setItem("currentMovie", clickedID);
+        localStorage.setItem("currentStatus", status);
+        localStorage.setItem("currentScore", score);
+        localStorage.setItem("currentDate", date);
+        localStorage.setItem("currentRewatches", rewatches);
+        localStorage.setItem("currentReview", review);
+        window.location="editform.html";
+        return false;
+    }
+    $(document).ready(function(){
+        $('[data-toggle="tooltip"]').tooltip();   
+    });
+
+    function rotate(classname){
+        $("#"+classname).toggleClass("rotated");
+    };
+
+    function removeEntry(storeID)
+    {
+        localStorage.removeItem(storeID + "_status");
+        localStorage.removeItem(storeID + "_score");
+        localStorage.removeItem(storeID + "_date");
+        localStorage.removeItem(storeID + "_rewatches");
+        localStorage.removeItem(storeID + "_review");
+        window.location.reload();
+    }
+</script>
